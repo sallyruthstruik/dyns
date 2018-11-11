@@ -39,7 +39,7 @@ func doRequest(throttler chan int){
 
 func main() {
 	throttler := make(chan int, 50)
-	count_requests := 1000
+	count_requests := 10000
 
 	start := time.Now()
 	for i:= 0; i < count_requests; i++ {
@@ -50,6 +50,7 @@ func main() {
 	d := time.Now().Sub(start).Seconds()
 
 	// 2018/11/12 00:45:46 Send 1000 requests in 16.042471801 seconds. Speed = 62.334534.02 OPS
+	// 2018/11/12 01:06:19 Send 10000 requests in 3.422920951 seconds. Speed = 2921.481432.02 OPS
 	log.Printf("Send %d requests in %v seconds. Speed = %f.02 OPS",
 		count_requests, d, float64(count_requests)/d)
 
