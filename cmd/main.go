@@ -30,26 +30,24 @@ func main() {
 		log.Fatal(err)
 	}
 	defer listener.Close()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	buffer := make([]byte, 1024)
-	count, addr, err := listener.ReadFrom(buffer)
-	if err != nil{
-		log.Fatal(err)
-	}
-	buffer = buffer[:count]
 
-	g, err := askGoogle(buffer)
-	if err != nil {
-		log.Fatal(err)
-	}
+	for {
+		count, addr, err := listener.ReadFrom(buffer)
+		if err != nil {
+			log.Fatal(err)
+		}
+		buffer = buffer[:count]
+		log.Printf("New NS request: %v", buffer)
 
-	_, err = listener.WriteTo(g, addr)
-	if err != nil {
-		log.Fatal(err)
+		g, err := askGoogle(buffer)
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Printf("Response: %v", g)
+		_, err = listener.WriteTo(g, addr)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
-
 }
